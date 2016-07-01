@@ -39,7 +39,6 @@ class TweetCell: UITableViewCell {
             timeStampLabel.text = ago
             numberOfLikes.text = String(tweet.favoritesCount)
             numberOfRetweets.text = String(tweet.retweetCount)
-            
         }
     }
 
@@ -57,13 +56,15 @@ class TweetCell: UITableViewCell {
         if !retweetButton.selected{
             TwitterClient.sharedInstance.retweet(tweet)
             retweetButton.selected = true
-            numberOfRetweets.text = String(Int(numberOfRetweets.text!)! + 1)
-            print(numberOfRetweets.text)
+            tweet.retweetStatus = true
+            tweet.retweetCount += 1
+            numberOfRetweets.text = String(tweet.retweetCount)
         }else{
             TwitterClient.sharedInstance.unretweet(tweet)
             retweetButton.selected = false
-            numberOfRetweets.text = String(Int(numberOfRetweets.text!)! - 1)
-            print(numberOfRetweets.text)
+            tweet.retweetStatus = false
+            tweet.retweetCount -= 1
+            numberOfRetweets.text = String(tweet.retweetCount)
         }
         
     }
@@ -73,11 +74,16 @@ class TweetCell: UITableViewCell {
         if !likeButton.selected{
             TwitterClient.sharedInstance.favorite(tweet)
             likeButton.selected = true
-            numberOfLikes.text = String(Int(numberOfLikes.text!)! + 1)
+            tweet.likeStatus = true
+            tweet.favoritesCount += 1
+            numberOfLikes.text = String(tweet.favoritesCount)
         }else{
             TwitterClient.sharedInstance.unfavorite(tweet)
             likeButton.selected = false
-            numberOfLikes.text = String(Int(numberOfLikes.text!)! - 1)
+            tweet.likeStatus = false
+            tweet.favoritesCount -= 1
+            numberOfLikes.text = String(tweet.favoritesCount)
+
         }
         
         

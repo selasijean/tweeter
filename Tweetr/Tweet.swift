@@ -19,15 +19,12 @@ class Tweet: NSObject {
     var retweetStatus: Bool!
     var likeStatus: Bool!
     var mentions:[String] = []
+    var retweetDict: NSDictionary?
     
     
     init(dictionary: NSDictionary){
-        //print(dictionary)
         text = dictionary["text"] as? String
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
-        favoritesCount = (dictionary["favorite_count"] as? Int) ?? 0
-        //print(favoritesCount)
-        
         let userDictionary = dictionary["user"] as! NSDictionary
         user = User(dictionary: userDictionary)
         
@@ -40,20 +37,22 @@ class Tweet: NSObject {
         }
         let entitites = dictionary["entities"] as? NSDictionary
         let user_mentions = entitites!["user_mentions"] as? [NSDictionary]
-        //print(user_mentions)
         if let user_mentions = user_mentions{
             for mention in user_mentions{
                 let screen_name = mention["screen_name"] as! String
                 mentions.append(screen_name)
-                //print(mentions)
-                //print(screen_name)
             }
         }
-        
-        //print(timeStamp)
         tweetID = dictionary["id_str"] as? String
         retweetStatus = dictionary["retweeted"] as? Bool
         likeStatus = dictionary["favorited"] as? Bool
+        retweetDict = dictionary["retweeted_status"] as? NSDictionary
+        if let retweetDict = retweetDict{
+            let tweet = Tweet(dictionary: retweetDict)
+            favoritesCount = tweet.favoritesCount
+        }else{
+            favoritesCount = (dictionary["favorite_count"] as? Int) ?? 0
+        }
     }
     
     class func tweetsWithArray(dictionaries: [NSDictionary]) -> [Tweet] {

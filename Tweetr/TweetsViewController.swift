@@ -22,16 +22,22 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
         pullHomeTimeLineData()
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
-  
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        tableView.reloadData()
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl){
@@ -87,39 +93,39 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tweets = tweets
             self.tableView.reloadData()
         }) { (error: NSError) in
-                print(error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
-
+    
     @IBAction func onLogoutButton(sender: AnyObject) {
         TwitterClient.sharedInstance.logout()
-       
+        
         
     }
     
     
-//    @IBAction func didTapOnProfilePhoto(sender: AnyObject) {
-//        print("tapped")
-//    performSegueWithIdentifier("otherProfileSegue", sender: sender)
-//    }
-
+    //    @IBAction func didTapOnProfilePhoto(sender: AnyObject) {
+    //        print("tapped")
+    //    performSegueWithIdentifier("otherProfileSegue", sender: sender)
+    //    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "detailSegue"{
             let cell = sender as! TweetCell
             let detailViewController = segue.destinationViewController as! TweetDetailViewController
             detailViewController.tweet = cell.tweet
-  
+            
         }else if segue.identifier == "otherUserSegue" {
             let userDetailViewController = segue.destinationViewController as! OtherUserProfileViewController
-                userDetailViewController.otherUser = otherUser
+            userDetailViewController.otherUser = otherUser
             
         }else if segue.identifier == "replySegue"{
             let replyButton = sender as! UIButton
             let replyViewController = segue.destinationViewController as! ReplyViewController
             replyViewController.tweet = tweets[replyButton.tag]
         }
-
-
-}
+        
+        
+    }
 }

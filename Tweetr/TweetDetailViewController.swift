@@ -24,7 +24,7 @@ class TweetDetailViewController: UIViewController {
     
     
     
-    var tweet: Tweet?
+    var tweet: Tweet!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,11 +60,15 @@ class TweetDetailViewController: UIViewController {
         if !retweetButton.selected{
             TwitterClient.sharedInstance.retweet(tweet!)
             retweetButton.selected = true
-            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! + 1)
+            tweet.retweetStatus = true
+            tweet.retweetCount += 1
+            retweetCountLabel.text = String(tweet.retweetCount)
         }else{
             TwitterClient.sharedInstance.unretweet(tweet!)
             retweetButton.selected = false
-            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! - 1)
+            tweet.retweetStatus = false
+            tweet.retweetCount -= 1
+            retweetCountLabel.text = String(tweet.retweetCount)
     }
     }
     
@@ -73,11 +77,18 @@ class TweetDetailViewController: UIViewController {
         if !likeButton.selected{
             TwitterClient.sharedInstance.favorite(tweet!)
             likeButton.selected = true
-            likesCountLabel.text = String(Int(likesCountLabel.text!)! + 1)
+            //likesCountLabel.text = String(Int(likesCountLabel.text!)! + 1)
+            tweet.likeStatus = true
+            tweet.favoritesCount += 1
+            likesCountLabel.text = String(tweet.favoritesCount)
+            
         }else{
             TwitterClient.sharedInstance.unfavorite(tweet!)
             likeButton.selected = false
-            likesCountLabel.text = String(Int(likesCountLabel.text!)! - 1)
+            //likesCountLabel.text = String(Int(likesCountLabel.text!)! - 1)
+            tweet.likeStatus = false
+            tweet.favoritesCount -= 1
+            likesCountLabel.text = String(tweet.favoritesCount)
         }
     }
 
