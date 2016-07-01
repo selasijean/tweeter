@@ -9,6 +9,7 @@ target 'Tweetr' do
   # Pods for Tweetr
     pod 'AFNetworking'
     pod 'BDBOAuth1Manager'
+    pod 'NSDate+TimeAgo'
 
   target 'TweetrTests' do
     inherit! :search_paths

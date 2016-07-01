@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NSDate_TimeAgo
 
 class TweetCell: UITableViewCell {
     
@@ -18,6 +19,9 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var timeStampLabel: UILabel!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var numberOfRetweets: UILabel!
+    @IBOutlet weak var numberOfLikes: UILabel!
+    @IBOutlet weak var replyButton: UIButton!
     
     var tweet: Tweet! {
         didSet{
@@ -30,6 +34,11 @@ class TweetCell: UITableViewCell {
             userhandleLabel.text = "@" + (tweet.user?.screenname as? String)!
             retweetButton.selected = tweet.retweetStatus!
             likeButton.selected = tweet.likeStatus!
+            let date = tweet.timeStamp!
+            let ago = date.timeAgo()
+            timeStampLabel.text = ago
+            numberOfLikes.text = String(tweet.favoritesCount)
+            numberOfRetweets.text = String(tweet.retweetCount)
             
         }
     }
@@ -48,9 +57,13 @@ class TweetCell: UITableViewCell {
         if !retweetButton.selected{
             TwitterClient.sharedInstance.retweet(tweet)
             retweetButton.selected = true
+            numberOfRetweets.text = String(Int(numberOfRetweets.text!)! + 1)
+            print(numberOfRetweets.text)
         }else{
             TwitterClient.sharedInstance.unretweet(tweet)
             retweetButton.selected = false
+            numberOfRetweets.text = String(Int(numberOfRetweets.text!)! - 1)
+            print(numberOfRetweets.text)
         }
         
     }
@@ -60,9 +73,11 @@ class TweetCell: UITableViewCell {
         if !likeButton.selected{
             TwitterClient.sharedInstance.favorite(tweet)
             likeButton.selected = true
+            numberOfLikes.text = String(Int(numberOfLikes.text!)! + 1)
         }else{
             TwitterClient.sharedInstance.unfavorite(tweet)
             likeButton.selected = false
+            numberOfLikes.text = String(Int(numberOfLikes.text!)! - 1)
         }
         
         

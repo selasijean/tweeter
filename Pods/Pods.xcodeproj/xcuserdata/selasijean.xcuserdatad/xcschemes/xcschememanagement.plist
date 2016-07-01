@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>NSDate+TimeAgo.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Tweetr.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,17 +47,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>8524EFDA3BDC389DC72412EF88818671</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>925285D13A88065C6F9EC51C3B0367BC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A0AD2194BB75616750EE122FED13DBF7</key>
+		<key>F0C5501B1822B8AADE7449ADD9FCE5FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F0C5501B1822B8AADE7449ADD9FCE5FA</key>
+		<key>FD1DC386A73FE1C27E95F15998CC33C9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

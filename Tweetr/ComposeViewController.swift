@@ -93,8 +93,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
-    
-    
     /*
     // MARK: - Navigation
 

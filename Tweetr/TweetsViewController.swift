@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import NSDate_TimeAgo
 
 class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -17,15 +18,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
         tableView.delegate = self
         tableView.dataSource = self
         pullHomeTimeLineData()
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
-        
-        
-        // Do any additional setup after loading the view.
+  
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,7 +57,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         cell.profileView?.userInteractionEnabled = true
         cell.profileView?.tag = indexPath.row
-        
+        cell.replyButton.tag = indexPath.row
         var tapped:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "TappedOnImage:")
         tapped.numberOfTapsRequired = 1
         cell.profileView.addGestureRecognizer(tapped)
@@ -66,8 +67,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func TappedOnImage(sender:UITapGestureRecognizer){
         
-        let gestureRec = sender as! UIGestureRecognizer
-//        let userDetailViewController = segue.destinationViewController as! OtherUserProfileViewController
+        let gestureRec = sender //as! UIGestureRecognizer
         let parent = gestureRec.view as! UIImageView
         let index = parent.tag
         let tweet = tweets[index]
@@ -77,20 +77,14 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print(user.name)
             self.otherUser = user
             self.performSegueWithIdentifier("otherUserSegue", sender: sender)
-            //userDetailViewController.otherUser = user
             }, failure: { (error: NSError) in
                 print(error)
         })
-        
-        
-        
-        //print(sender.view?.tag)
     }
     
     func pullHomeTimeLineData(){
         TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) in
             self.tweets = tweets
-            //print(self.tweets.count)
             self.tableView.reloadData()
         }) { (error: NSError) in
                 print(error.localizedDescription)
@@ -109,7 +103,6 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 //    performSegueWithIdentifier("otherProfileSegue", sender: sender)
 //    }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "detailSegue"{
@@ -118,28 +111,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             detailViewController.tweet = cell.tweet
   
         }else if segue.identifier == "otherUserSegue" {
-            
-//            let gestureRec = sender as! UIGestureRecognizer
             let userDetailViewController = segue.destinationViewController as! OtherUserProfileViewController
-//            let parent = gestureRec.view as! UIImageView
-//            let index = parent.tag
-//            let tweet = tweets[index]
-//            let userID = tweet.user!.userID
-//            TwitterClient.sharedInstance.showUserInfo(userID!, success: { (user: User) in
-//                print(user)
-//                print(user.name)
                 userDetailViewController.otherUser = otherUser
-//                }, failure: { (error: NSError) in
-//                    print(error)
-//            })
             
+        }else if segue.identifier == "replySegue"{
+            let replyButton = sender as! UIButton
+            let replyViewController = segue.destinationViewController as! ReplyViewController
+            replyViewController.tweet = tweets[replyButton.tag]
         }
-        
-        
-        
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
 
 
+}
 }

@@ -17,12 +17,18 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var avatarView: UIImageView!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var timeStampLabel: UILabel!
+    @IBOutlet weak var retweetCountLabel: UILabel!
+    @IBOutlet weak var likesCountLabel: UILabel!
+    @IBOutlet weak var contentView: UIView!
+    
     
     
     var tweet: Tweet?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        contentView.hidden = true
         
         tweetLabel.text = tweet?.text as? String
         let profileUrl = tweet!.user?.profileUrl_http
@@ -33,6 +39,16 @@ class TweetDetailViewController: UIViewController {
         handleLabel.text = "@" + (tweet!.user?.screenname as? String)!
         likeButton.selected = tweet!.likeStatus!
         retweetButton.selected = tweet!.retweetStatus!
+        let date = tweet!.timeStamp!
+        //let ago = date.timeAgo()
+        timeStampLabel.text = date.description
+        if (tweet!.favoritesCount > 0) || (tweet?.retweetCount > 0){
+            contentView.hidden = false
+            retweetCountLabel.text = String(tweet!.retweetCount)
+            likesCountLabel.text = String(tweet!.favoritesCount)
+        }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,9 +60,11 @@ class TweetDetailViewController: UIViewController {
         if !retweetButton.selected{
             TwitterClient.sharedInstance.retweet(tweet!)
             retweetButton.selected = true
+            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! + 1)
         }else{
             TwitterClient.sharedInstance.unretweet(tweet!)
             retweetButton.selected = false
+            retweetCountLabel.text = String(Int(retweetCountLabel.text!)! - 1)
     }
     }
     
@@ -55,9 +73,11 @@ class TweetDetailViewController: UIViewController {
         if !likeButton.selected{
             TwitterClient.sharedInstance.favorite(tweet!)
             likeButton.selected = true
+            likesCountLabel.text = String(Int(likesCountLabel.text!)! + 1)
         }else{
             TwitterClient.sharedInstance.unfavorite(tweet!)
             likeButton.selected = false
+            likesCountLabel.text = String(Int(likesCountLabel.text!)! - 1)
         }
     }
 

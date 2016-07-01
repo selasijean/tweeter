@@ -29,10 +29,7 @@ class MyProfileViewController: UIViewController {
         if let profileBanner = profileBanner{
             bannerImageView.setImageWithURL(profileBanner)
         }
-        
         profilePhotoImageView.setImageWithURL((myself?.profileUrl_http)!)
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

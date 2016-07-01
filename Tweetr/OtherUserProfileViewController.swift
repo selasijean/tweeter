@@ -22,13 +22,15 @@ class OtherUserProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backgroundPhotoImageView.setImageWithURL((otherUser?.profileBanner)!)
+        let banner = otherUser?.profileBanner
+        if let banner = banner{
+            backgroundPhotoImageView.setImageWithURL((otherUser?.profileBanner)!)
+        }
         profilePhotoImageView.setImageWithURL((otherUser?.profileUrl_http)!)
         numberTweetsLabel.text = String((otherUser?.tweetsCount)!)
         numberFollowersLabel.text = String((otherUser?.followersCount)!)
         numberFollowingLabel.text = String((otherUser?.followingCount)!)
 
-        // Do any additional setup after loading the view.
         
     }
 

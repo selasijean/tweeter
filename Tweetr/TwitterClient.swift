@@ -134,6 +134,20 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
+    func sendReply(tweet: String, tweetID: Int, success: () -> () ){
+        let urlString = "1.1/statuses/update.json"
+        let params = ["status" : tweet, "in_reply_to_status_id" : tweetID]
+        
+        POST(urlString, parameters: params, success: { (task: NSURLSessionDataTask, response: AnyObject?) in
+            success()
+            //success(response!)
+            //print(response)
+        }) { (task: NSURLSessionDataTask?, error: NSError) in
+            print(error)
+            
+        }
+    }
+    
     func showUserInfo(userID: String, success: (User) ->(), failure: (NSError) ->()){
         
         let urlString = "1.1/users/show.json?user_id=\(userID)"
